@@ -56,6 +56,6 @@ Future work
 Previous work
 -------------
 
-* [KSquares][]
+* [KSquares][] (c++)
 
 [KSquares]: http://games.kde.org/game.php?game=ksquares
