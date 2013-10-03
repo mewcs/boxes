@@ -11,10 +11,12 @@ Ideas
 
 * Network capabilities.
 	- Allow players to connect to one another.
+	- Standard modules socket and asyncore could be usefull/sufficient for the networking functionality
 
 * Graphical user interface.
 	- Create a window and render the lines that makes up the various boxes.
 	- Derive user input from the mouse.
+	- pygame module has among other things a simple 2d-renderer
 
 Timeframe
 ---------
