@@ -4,6 +4,10 @@ boxes
 The purpose of this project is to create a digital version of the pencil and
 paper game known as [boxes][].
 
+The following image demonstrates a game of boxes on a 2x2 board.
+
+![Boxes Screenshot](https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Dots-and-boxes.svg/300px-Dots-and-boxes.svg.png)
+
 [boxes]: https://en.wikipedia.org/wiki/Dots_and_Boxes
 
 Ideas
@@ -11,12 +15,17 @@ Ideas
 
 * Network capabilities.
 	- Allow players to connect to one another.
-	- Standard modules socket and asyncore could be usefull/sufficient for the networking functionality
+	- Standard modules socket and asyncore could be useful/sufficient for the networking functionality.
 
 * Graphical user interface.
 	- Create a window and render the lines that makes up the various boxes.
 	- Derive user input from the mouse.
-	- pygame module has among other things a simple 2d-renderer
+	- pygame module has among other things a simple 2d-renderer.
+	- Qt is another option.
+
+* Use the latest stable version of all libraries:
+	- Python 3.3.x
+	- Qt 5.1.x
 
 Timeframe
 ---------
@@ -47,6 +56,15 @@ Milestones
 
 4. Implement base functionality.
 	* ...
+
+Design
+------
+
+* Isolate logic so that it can be used by a variety of front-ends.
+* Isolate networking functionality.
+* Implement two front-ends to verify the isolation of logic and networking.
+	- A command line interface.
+	- A graphical user interface (Qt).
 
 Future work
 -----------
