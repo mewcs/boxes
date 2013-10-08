@@ -13,15 +13,15 @@ The following image demonstrates a game of boxes on a 2x2 board.
 Ideas
 -----
 
-* Network capabilities.
+* Networking capabilities.
 	- Allow players to connect to one another.
 	- Standard modules socket and asyncore could be useful/sufficient for the networking functionality.
 
 * Graphical user interface.
 	- Create a window and render the lines that makes up the various boxes.
 	- Derive user input from the mouse.
-	- pygame module has among other things a simple 2d-renderer.
-	- Qt is another option.
+	- The pygame module has among other things a simple 2d-renderer.
+	- Qt could also be used for rendering.
 
 * Use the latest stable version of all libraries:
 	- Python 3.3.x
@@ -48,14 +48,17 @@ Milestones
 
 3. Discuss the API and design.
 	* How should the project be implemented?
-		- Which parts of the API can be separated into individual modules/classes
-		  that can later be reused to create a NPC player with some basic kind of
-		  artificial intelligence.
+		- Which parts of the API can be separated into individual modules/classes?
+		  Would it be possbile to use these modules to create a NPC player with
+		  some basic kind of artificial intelligence.
 	* Implement a skeleton structure of the API which includes class, method and
 	  function definitions.
 
 4. Implement base functionality.
-	* ...
+
+5. Test functionality and try to locate bugs.
+
+6. Fix bugs and clean up the implementation.
 
 Design
 ------
