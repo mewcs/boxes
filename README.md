@@ -23,6 +23,9 @@ Ideas
 	- The pygame module has among other things a simple 2d-renderer.
 	- Qt could also be used for rendering.
 
+* Pause and continue.
+	- It should be possible to save the game state.
+
 * Use the latest stable version of all libraries:
 	- Python 3.3.x
 	- Qt 5.1.x
