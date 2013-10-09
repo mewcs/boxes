@@ -25,6 +25,7 @@ Ideas
 
 * Pause and continue.
 	- It should be possible to save the game state.
+	- Transfer old game state from server to client at the beginning of the game.
 
 * Use the latest stable version of all libraries:
 	- Python 3.3.x
@@ -78,6 +79,11 @@ Future work
 * Create a simple NPC.
 	- This would allow single player games in which a human is playing against
 	  the computer.
+
+* Use the grid from a finished game of boxes to construct a cubescape. The
+  cubescape will be divided into blue and red areas based on the players color.
+  This devision of areas could be used as a starting point for a game of RISK
+  or Heroes of Might and Magic.
 
 Previous work
 -------------
