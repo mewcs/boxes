@@ -23,7 +23,7 @@ Ideas
 	- The pygame module has among other things a simple 2d-renderer.
 	- Qt could also be used for rendering.
 
-* Pause and continue.
+* Pause and continue (if time allows).
 	- It should be possible to save the game state.
 	- Transfer old game state from server to client at the beginning of the game.
 
