@@ -25,7 +25,7 @@ class MainWindow(QtWidgets.QWidget):
 		
 
 		# Grid widget
-		self.grid = gridWidget.GridWidget( grid.Grid( 10, 10 ) )
+		self.grid = gridWidget.GridWidget( grid.Grid( 25, 25 ) )
 
 		# Main layout
 		mainLyt = QtWidgets.QVBoxLayout()
@@ -43,14 +43,14 @@ class MainWindow(QtWidgets.QWidget):
 		rect.moveCenter(point)
 		self.move(rect.topLeft())
 
-	def addLines( self, pos:int ):
+	def addLine( self, pos:int ):
 		self.grid.addLine( pos )
 
 	def closeWindow(self):
 		sys.exit(self.app.exec_())
 
 def createWindow():
-	win = MainWindow(320, 240)
+	win = MainWindow(530, 530)
 	return win
 
 if __name__ == '__main__':

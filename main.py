@@ -42,12 +42,12 @@ def main():
 					continue
 				myturn = False
 			
-			win.addLines( int(outmessage) )
+			win.addLine( int(outmessage) )
 			c.sendMessage( outmessage )
 		else:
 			print( "Waiting for response" )
 			inmessage = c.receiveMessage()
-			win.addLines( int(inmessage ) )
+			win.addLine( int(inmessage ) )
 			print( "Recieved: ", inmessage )
 			myturn = True
 
