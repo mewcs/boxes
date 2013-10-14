@@ -44,7 +44,8 @@ class MainWindow(QtWidgets.QWidget):
 		rect = self.frameGeometry()
 		point = QtWidgets.QDesktopWidget().availableGeometry().center()
 		rect.moveCenter(point)
-		self.move(rect.topLeft())
+		#self.move(rect.topLeft())
+		self.move(rect.topRight())
 
 	def addLine( self, pos:int ):
 		self.grid.addLine( pos )
