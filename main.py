@@ -4,7 +4,7 @@ import gui
 
 def main():
 	"""Main function for Boxes"""
-	
+
 	# Create window
 	win = gui.createWindow()
 
@@ -26,7 +26,7 @@ def main():
 
 	if not c:
 		return
-	
+
 	# Main loop
 	while 1:
 		if myturn:
@@ -41,8 +41,9 @@ def main():
 					print("Invalid input")
 					continue
 				myturn = False
-			
+
 			win.addLine( int(outmessage) )
+			win.setFocus()
 			c.sendMessage( outmessage )
 		else:
 			print( "Waiting for response" )
