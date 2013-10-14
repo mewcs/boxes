@@ -90,30 +90,30 @@ class Grid(object):
 		# Check adjecent lines
 		if orient == self.HLINE:
 			# Above and below
-			for i in (-1,1):
+			for i,i2 in zip([-1,1], [-1,0]):
 				if row+i < 0 or row+i>self._rows:
 					continue
 				x1 = self.getPos( col, row+i, orient ) in drawnLines
-				x2 = self.getPos( col, row+i, not orient ) in drawnLines
-				x3 = self.getPos( col+1, row+i, not orient ) in drawnLines
+				x2 = self.getPos( col, row+i2, not orient ) in drawnLines
+				x3 = self.getPos( col+1, row+i2, not orient ) in drawnLines
 
 				if x1 and x2 and x3:
-					box_row = row+(i-1)/2
+					box_row = row+i2
 					box_col = col
 					box_pos = (box_row*self._cols)+box_col
 					completedBoxes.append( box_pos )
 
 		else:
-			for i in (-1,1):
+			for i,i2 in zip([-1,1], [-1,0]):
 				if col+i < 0 or col+i>self._cols:
 					continue
 				x1 = self.getPos( col+i, row, orient ) in drawnLines
-				x2 = self.getPos( col+i, row, not orient ) in drawnLines
-				x3 = self.getPos( col+i, row+1, not orient ) in drawnLines
+				x2 = self.getPos( col+i2, row, not orient ) in drawnLines
+				x3 = self.getPos( col+i2, row+1, not orient ) in drawnLines
 
 				if x1 and x2 and x3:
 					box_row = row
-					box_col = int( col+(i-1)/2 )
+					box_col = col+i2
 					box_pos = (box_row*self._cols)+box_col
 					completedBoxes.append( box_pos )
 			
