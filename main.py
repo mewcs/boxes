@@ -1,5 +1,6 @@
 import network
 import gui
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 def main():
 	"""Main function for Boxes"""
@@ -9,20 +10,25 @@ def main():
 	# Create window
 	win = gui.createWindow()
 
-	type = int( input("Start server(0) or client(1)") )
+	askServerClient = QtWidgets.QInputDialog( win )
+	askServerClient.setLabelText( "Enter ip to connect to or empty to be host" ) 
+	askServerClient.exec()
+
+	connectTo = askServerClient.textValue()
+
+	host = connectTo if connectTo.strip() else None
 
 	c = None
 	myturn = False
-	if type == 0:
+	if not host:
 		c = network.server()
 		print("Waiting for opponent")
 		c.waitForConnection()
 		print( "Connected to: ", c.connectedTo() )
 		myturn = True
 
-	elif type == 1:
+	else:
 		c = network.client()
-		host = input("Host:")
 		c.connectToServer( host )
 
 	if not c:
