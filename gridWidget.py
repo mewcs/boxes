@@ -1,5 +1,7 @@
+import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 import grid
+import network
 
 LINE_LENGTH = 20
 LINE_THICKNESS = 1
@@ -54,6 +56,21 @@ class GridWidget( QtWidgets.QWidget ):
 		self._lastLineId = None
 		self._prevMousePos = None
 		self.setMouseTracking(True)
+		self.initNetworkThread()
+
+	def initNetworkThread(self):
+		if len(sys.argv) > 1:
+			# Client.
+			host = sys.argv[1]
+			self.conn_thread = network.client(host)
+			self.myturn = False
+		else:
+			# Server.
+			self.conn_thread = network.server()
+			self.myturn = True
+		self.conn_thread.data_recv.connect(self.on_recv)
+		self.conn_thread.start()
+
 
 	def initGrid( self ):
 		maxPos = self._grid.maxPos()
@@ -64,6 +81,14 @@ class GridWidget( QtWidgets.QWidget ):
 		for box in range( self._grid.maxBox() ):
 			column, row = self._grid.getBoxCoord( box )
 			self.boxes.append( GridBox( column, row ) )
+
+	def on_recv(self, data):
+		print("on_recv.")
+		pos = int(data)
+		print("   pos:", pos)
+		#if self.myturn:
+		#	return
+		# Verify that the position is valid and that it hasn't been set already.
 
 	def setLine( self, cell:int ):
 		self.highlite( cell )
@@ -84,7 +109,7 @@ class GridWidget( QtWidgets.QWidget ):
 		pixmapWidth = self._grid._cols*LINE_LENGTH+2
 		pixmapHeight = self._grid._rows*LINE_LENGTH+2
 
-		self.scale = min( float( self.width() )/pixmapWidth, float( self.height() )/pixmapHeight ) 
+		self.scale = min( float( self.width() )/pixmapWidth, float( self.height() )/pixmapHeight )
 
 	def paintEvent(self, event):
 		painter = QtGui.QPainter()
@@ -167,6 +192,8 @@ class GridWidget( QtWidgets.QWidget ):
 			return
 
 		print("click at pos:", pos)
+		print("sending:", pos)
+		self.conn_thread.data_send.emit(str(pos))
 
 	def locateLine(self, x:int, y:int) -> int:
 		x /= self.scale
