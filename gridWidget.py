@@ -41,13 +41,12 @@ class GridWidget( QtWidgets.QWidget ):
 		for cell in range( maxPos+1 ):
 			column, row, dir = self._grid.getCoord( cell )
 			self.lines.append( GridLine( column, row, dir ) )
-
-	def addLine( self, cell:int ):
-		self._grid.setLine( cell )
-		self.highlight( cell )
+			
+	def setLine( self, cell:int ):
+		self.highlite( cell )
 		self.repaint()
-
-	def highlight( self, cell:int ):
+		
+	def highlite( self, cell:int ):
 		if self._lastLineId is not None:
 			self.lines[ self._lastLineId ].color = LINE_DRAWN
 		self._lastLineId = cell
