@@ -44,11 +44,11 @@ class GridWidget( QtWidgets.QWidget ):
 		for cell in range( maxPos+1 ):
 			column, row, dir = self._grid.getCoord( cell )
 			self.lines.append( GridLine( column, row, dir ) )
-			
+
 	def setLine( self, cell:int ):
 		self.highlite( cell )
 		self.repaint()
-		
+
 	def highlite( self, cell:int ):
 		if self._lastLineId is not None:
 			self.lines[ self._lastLineId ].color = LINE_DRAWN
@@ -100,13 +100,11 @@ class GridWidget( QtWidgets.QWidget ):
 			return
 
 		# Restore the line color at the previous mouse position.
-		if self._prevMousePos is not None:
-			self.lines[self._prevMousePos].color = LINE_UNDRAWN
-			self.lines[self._prevMousePos].width = LINE_THICKNESS
+		self.restorePrevMouseLine()
 
 		# Return if no line was located at the mouse cursor coordinates.
 		if pos is None:
-			self._prevMousePos = None
+			# Repaint to remove prev mouse line.
 			self.repaint()
 			return
 
@@ -144,3 +142,15 @@ class GridWidget( QtWidgets.QWidget ):
 			if line.start.x()-xpad <= x <= line.end.x()+xpad and line.start.y()-ypad <= y <= line.end.y()+ypad:
 				return pos
 		return None
+
+	def restorePrevMouseLine(self):
+		""" Restore the line color at the previous mouse position. """
+		if self._prevMousePos is not None:
+			self.lines[self._prevMousePos].color = LINE_UNDRAWN
+			self.lines[self._prevMousePos].width = LINE_THICKNESS
+			self._prevMousePos = None
+
+	def leaveEvent(self, event):
+		# Restore the line color at the previous mouse position.
+		self.restorePrevMouseLine()
+		self.repaint()
