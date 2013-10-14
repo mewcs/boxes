@@ -65,6 +65,15 @@ class Grid(object):
 			row, col = divmod(pos, (self._cols+1))
 			return col, row, self.VLINE
 
+	# getPos returns the position associated with the provided column, row and
+	# orientation.
+	def getPos(self, col:int, row:int, orientation:bool) -> int:
+		pass
+
+	# completeBox returns true if the line at pos is part of a complete box.
+	def completeBox(self, pos:int) -> bool:
+		pass
+
 	# maxPos returns the maximum valid position in the grid, which always
 	# corresponds to the vertical line in the lower right corner.
 	def maxPos(self) -> int:
