@@ -10,6 +10,9 @@ LINE_DRAWN = QtCore.Qt.black
 LINE_LASTDRAWN = QtCore.Qt.red
 LINE_MOUSE = QtCore.Qt.yellow
 
+COLOR_PLAYER = QtCore.Qt.blue
+COLOR_OPPONENT = QtCore.Qt.green
+
 class GridLine( object ):
 	def __init__( self, column:int, row:int, dir:int ):
 		pad = LINE_THICKNESS_DRAWN_HALF
@@ -28,25 +31,46 @@ class GridLine( object ):
 		self.color = LINE_UNDRAWN
 		self.width = LINE_THICKNESS
 
+class GridBox( object ):
+	def __init__( self, column:int, row:int ):
+		self.start = QtCore.QPoint()
+		self.start.setX( column*LINE_LENGTH )
+		self.start.setY( row*LINE_LENGTH )
+		self.end = QtCore.QPoint()
+		self.end.setX( self.start.x() + LINE_LENGTH )
+		self.end.setY( self.start.y() + LINE_LENGTH )
+
+		self.color = None
+
 class GridWidget( QtWidgets.QWidget ):
 	def __init__( self, grid : grid.Grid ):
 		super(GridWidget, self).__init__()
 		self._grid = grid
 		self.lines = list()
-		self.initGridLines()
+		self.boxes = list()
+		self.initGrid()
+		self.scale = 1.0
 		self.show()
 		self._lastLineId = None
 		self._prevMousePos = None
 		self.setMouseTracking(True)
 
-	def initGridLines( self ):
+	def initGrid( self ):
 		maxPos = self._grid.maxPos()
 		for cell in range( maxPos+1 ):
 			column, row, dir = self._grid.getCoord( cell )
 			self.lines.append( GridLine( column, row, dir ) )
 
+		for box in range( self._grid.maxBox() ):
+			column, row = self._grid.getBoxCoord( box )
+			self.boxes.append( GridBox( column, row ) )
+
 	def setLine( self, cell:int ):
 		self.highlite( cell )
+		self.repaint()
+
+	def setBox( self, cell:int, color ):
+		self.boxes[cell].color = color
 		self.repaint()
 
 	def highlite( self, cell:int ):
@@ -56,9 +80,21 @@ class GridWidget( QtWidgets.QWidget ):
 		self.lines[ cell ].color = LINE_LASTDRAWN
 		self.lines[ cell ].width = LINE_THICKNESS_DRAWN
 
+	def resizeEvent( self, QResizeEvent ):
+		pixmapWidth = self._grid._cols*LINE_LENGTH+2
+		pixmapHeight = self._grid._rows*LINE_LENGTH+2
+
+		self.scale = min( float( self.width() )/pixmapWidth, float( self.height() )/pixmapHeight ) 
+
 	def paintEvent(self, event):
 		painter = QtGui.QPainter()
 		painter.begin(self)
+		painter.scale( self.scale, self.scale )
+
+		# draw boxes
+		for box in self.boxes:
+			if box.color:
+				self.drawBox( box, painter )
 
 		# draw background grid.
 		for line in self.lines:
@@ -89,6 +125,11 @@ class GridWidget( QtWidgets.QWidget ):
 		pen.setWidth(line.width)
 		painter.setPen(pen)
 		painter.drawLine(line.start, line.end)
+
+	@staticmethod
+	def drawBox( box:GridBox, painter:QtGui.QPainter ):
+		rect = QtCore.QRect( box.start, box.end )
+		painter.fillRect( rect, box.color )
 
 	def mouseMoveEvent(self, event):
 		x = event.x()
@@ -128,6 +169,8 @@ class GridWidget( QtWidgets.QWidget ):
 		print("click at pos:", pos)
 
 	def locateLine(self, x:int, y:int) -> int:
+		x /= self.scale
+		y /= self.scale
 		pad = LINE_THICKNESS_DRAWN_HALF + 1
 		for pos in range(len(self.lines)):
 			line = self.lines[pos]

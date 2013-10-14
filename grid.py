@@ -77,6 +77,16 @@ class Grid(object):
 		else:
 			return (self._horiz)+(row*(self._cols+1))+col
 
+	def getBoxCoord( self, pos:int ) -> (int,int):
+		row, column = divmod( pos, self._rows )
+		return column, row
+
+	def getBoxPos( self, col:int, row:int ) -> int:
+		return (row*self._cols)+col
+
+	def maxBox( self ) -> int:
+		return self._cols*self._rows
+
 	def completesBoxes(self, pos:int) -> bool:
 		""" 
 		Returns: A list of zero to two indices of the boxes the argument pos completes 
@@ -100,8 +110,7 @@ class Grid(object):
 				if x1 and x2 and x3:
 					box_row = row+i2
 					box_col = col
-					box_pos = (box_row*self._cols)+box_col
-					completedBoxes.append( box_pos )
+					completedBoxes.append( self.getBoxPos( box_col, box_row ) )
 
 		else:
 			for i,i2 in zip([-1,1], [-1,0]):
@@ -114,8 +123,7 @@ class Grid(object):
 				if x1 and x2 and x3:
 					box_row = row
 					box_col = col+i2
-					box_pos = (box_row*self._cols)+box_col
-					completedBoxes.append( box_pos )
+					completedBoxes.append( self.getBoxPos( box_col, box_row ) )
 			
 
 		return completedBoxes

@@ -50,7 +50,9 @@ def main():
 					myturn = False
 				elif result > 0:
 					SCORE[ 0 ] += result
-					print("Score is now %d:%d, draw again" % ( SCORE[0], SCORE[1] ) )
+					win.setScore( SCORE )
+					for box in win.grid.completesBoxes( int(outmessage) ):	
+						win.setBox( box, 0 )
 			else:
 				print("Can't draw here, try again")
 					
@@ -65,7 +67,9 @@ def main():
 					myturn = True
 				else:
 					SCORE[ 1 ] += result
-					print("Score is now %d:%d, draw again" % ( SCORE[0], SCORE[1] ) )
+					win.setScore( SCORE )
+					for box in win.grid.completesBoxes( int(outmessage) ):	
+						win.setBox( box, 1 )
 
 	c.close()
 	win.closeWindow()

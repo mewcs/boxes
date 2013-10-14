@@ -19,12 +19,22 @@ class MainWindow(QtWidgets.QWidget):
 		self.center()
 		self.setWindowTitle('Boxes')
 
-		# Button row
-		quitButton = QtWidgets.QPushButton()
-		quitButton.setText('QUIT')
+		# Score board
+		self.scoreLabel = QtWidgets.QLabel()
+		self.scoreLabel.setAlignment( QtCore.Qt.AlignCenter )
 
-		bLyt = QtWidgets.QHBoxLayout()
-		bLyt.addWidget( quitButton )
+		sizePolicy = QtWidgets.QSizePolicy()
+		sizePolicy.setVerticalPolicy( QtWidgets.QSizePolicy.Fixed )
+		self.scoreLabel.setSizePolicy( sizePolicy )
+		
+		font = QtGui.QFont()
+		font.setPointSize( 15 )
+		self.scoreLabel.setFont( font )
+
+		self.setScore()
+
+		scoreLyt = QtWidgets.QHBoxLayout()
+		scoreLyt.addWidget( self.scoreLabel )
 
 
 		# Grid widget
@@ -33,7 +43,7 @@ class MainWindow(QtWidgets.QWidget):
 
 		# Main layout
 		mainLyt = QtWidgets.QVBoxLayout()
-		#mainLyt.addLayout( bLyt, 20 )
+		mainLyt.addLayout( scoreLyt )
 		mainLyt.addWidget( self.gridWidget )
 
 		self.setLayout( mainLyt )
@@ -44,11 +54,20 @@ class MainWindow(QtWidgets.QWidget):
 	def setLine( self, pos:int ):
 		self.gridWidget.setLine( pos )
 
+	def setScore( self, score:list = [ 0, 0 ] ):
+		"""
+		Set the score in the ui. First index is the player, second is the opponents
+		"""
+		self.scoreLabel.setText( "You    %d  :  %d    Opponent"  % (score[0], score[1] ) )
+
+	def setBox( self, pos:int, isOpponent:bool ):
+		color = gridWidget.COLOR_OPPONENT if isOpponent else gridWidget.COLOR_PLAYER
+		self.gridWidget.setBox( pos, color )
+
 	def center(self):
 		rect = self.frameGeometry()
 		point = QtWidgets.QDesktopWidget().availableGeometry().center()
 		rect.moveCenter(point)
-		#self.move(rect.topLeft())
 		self.move(rect.topRight())
 
 	def closeWindow(self):
