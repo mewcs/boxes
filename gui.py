@@ -48,7 +48,8 @@ class MainWindow(QtWidgets.QWidget):
 		rect = self.frameGeometry()
 		point = QtWidgets.QDesktopWidget().availableGeometry().center()
 		rect.moveCenter(point)
-		self.move(rect.topLeft())
+		#self.move(rect.topLeft())
+		self.move(rect.topRight())
 
 	def closeWindow(self):
 		sys.exit(self.app.exec_())
