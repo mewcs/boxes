@@ -42,17 +42,14 @@ class communicator(QtCore.QThread):
 class server(communicator):
 
     def __init__(self, port=DEFAULT_PORT):
-        print("server.__init__()")
         super(server, self).__init__()
         self._port = port
 
     def run(self):
-        print("server.run()")
         self.waitForConnection()
         super(server, self).run()
 
     def waitForConnection(self):
-        print("server.waitForConnection()")
         self._socket.bind(('', self._port))
         self._socket.listen(1)
         self._connection, self._addr = self._socket.accept()
@@ -61,16 +58,13 @@ class server(communicator):
 class client(communicator):
 
     def __init__(self, host, port=DEFAULT_PORT):
-        print("client.__init__()")
         super(client, self).__init__()
         self._host = host
         self._port = port
 
     def run(self):
-        print("client.run()")
         self.connectToServer()
         super(client, self).run()
 
     def connectToServer(self):
-        print("client.connectToServer()")
         self._connection.connect((self._host, self._port))

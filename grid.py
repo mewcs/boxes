@@ -26,15 +26,19 @@ class Grid(object):
         # Number of vertical lines.
         self._vert = (cols + 1) * rows
 
-    # _validate validates the provided position. It raises an exception if the
-    # provided position falls outside of the grid.
     def _validate(self, pos: int):
+        """
+        _validate validates the provided position. It raises an exception if the
+        provided position falls outside of the grid.
+        """
         if pos < 0 or pos > self.maxPos():
             raise Exception('position %d falls outside of the grid.' % (pos))
 
-    # _hasLine returns True if the line at the provided position is already
-    # marked as drawn.
     def _hasLine(self, pos: int) -> bool:
+        """
+        _hasLine returns True if the line at the provided position is already
+        marked as drawn.
+        """
         self._validate(pos)
         # Check if the bit at the provided position is already set in the grid.
         if self._grid & 1 << pos != 0:
@@ -42,9 +46,12 @@ class Grid(object):
         else:
             return False
 
-    # setLine tries to mark the line at the provided position as drawn. It
-    # returns number of boxes completed by line drawn of -1 if the line was already marked as drawn.
     def setLine(self, pos: int) -> bool:
+        """
+        setLine tries to mark the line at the provided position as drawn. It
+        returns number of boxes completed by line drawn of -1 if the line was
+        already marked as drawn.
+        """
         # Check if the line has already been marked as drawn. Note that _hasLine
         # also validates the provided position.
         if self._hasLine(pos):
@@ -53,10 +60,12 @@ class Grid(object):
 
         return len(self.completesBoxes(pos))
 
-    # getCoord returns the column and row numbers associated with a given
-    # position. The boolean return argument indicates the orientation of the
-    # line, which is either horizontal (HLINE) or vertical (VLINE).
     def getCoord(self, pos: int) -> (int, int, bool):
+        """
+        getCoord returns the column and row numbers associated with a given
+        position. The boolean return argument indicates the orientation of the
+        line, which is either horizontal (HLINE) or vertical (VLINE).
+        """
         self._validate(pos)
         if pos < self._horiz:
             row, col = divmod(pos, self._cols)
@@ -69,7 +78,7 @@ class Grid(object):
     def getPos(self, col: int, row: int, orientation: bool) -> int:
         """
         Returns: the position associated with the provided column, row and
-        orientation
+        orientation.
         """
         if orientation == self.HLINE:
             return (row * self._cols) + col
@@ -88,7 +97,8 @@ class Grid(object):
 
     def completesBoxes(self, pos: int) -> bool:
         """
-        Returns: A list of zero to two indices of the boxes the argument pos completes
+        Returns: A list of zero to two indices of the boxes the argument pos
+        completes.
         """
         col, row, orient = self.getCoord(pos)
 
@@ -126,34 +136,16 @@ class Grid(object):
 
         return completedBoxes
 
-    # maxPos returns the maximum valid position in the grid, which always
-    # corresponds to the vertical line in the lower right corner.
     def maxPos(self) -> int:
+        """
+        maxPos returns the maximum valid position in the grid, which always
+        corresponds to the vertical line in the lower right corner.
+        """
         return self._horiz + self._vert - 1
 
     def drawnLines(self) -> [int]:
-        """ Returns a list containing the positions of all lines that are
-                marked as drawn.
+        """
+        Returns a list containing the positions of all lines that are marked as
+        drawn.
         """
         return [pos for pos in range(self.maxPos() + 1) if self._hasLine(pos)]
-
-
-def testGrid():
-    grid = Grid(4, 3)
-    if grid.setLine(0):
-        print("was able to set line 0")
-    if grid.setLine(4):
-        print("was able to set line 12")
-    if grid.setLine(16):
-        print("was able to set line 21")
-    while True:
-        print("Drawn lines: ", grid.drawnLines())
-        coord = int(input("Enter pos to set: "))
-        col, row, orientation = grid.getCoord(coord)
-        print("col:", col, "row:", row, "orientation:", orientation)
-        print("The reverse getPos of above is ", grid.getPos(col, row, orientation))
-        print("Result is: ", grid.setLine(coord))
-        print("Completed boxes are: ", grid.completesBoxes(coord))
-
-if __name__ == '__main__':
-    testGrid()
