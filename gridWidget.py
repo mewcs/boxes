@@ -73,14 +73,14 @@ class GridWidget(QtWidgets.QWidget):
             self.boxes.append(GridBox(column, row))
 
     def setLine(self, cell: int):
-        self.highlite(cell)
+        self.highlight(cell)
         self.repaint()
 
     def setBox(self, cell: int, color):
         self.boxes[cell].color = color
         self.repaint()
 
-    def highlite(self, cell: int):
+    def highlight(self, cell: int):
         if self._lastLineId is not None:
             self.lines[self._lastLineId].color = LINE_DRAWN
         self._lastLineId = cell
