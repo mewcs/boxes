@@ -1,7 +1,6 @@
 import game
 import PyQt5.QtGui
 import sys
-global QApp
 
 
 def main():
