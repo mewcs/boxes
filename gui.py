@@ -4,6 +4,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import grid
 import gridWidget
 
+
 class MainWindow(QtWidgets.QWidget):
 	def __init__(self, cols, rows):
 		self.app = QtWidgets.QApplication(sys.argv)
@@ -69,9 +70,6 @@ class MainWindow(QtWidgets.QWidget):
 		point = QtWidgets.QDesktopWidget().availableGeometry().center()
 		rect.moveCenter(point)
 		self.move(rect.topRight())
-
-	def closeWindow(self):
-		sys.exit(self.app.exec_())
 
 def createWindow():
 	win = MainWindow(5, 5)

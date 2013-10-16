@@ -45,6 +45,8 @@ class GridBox( object ):
 		self.color = None
 
 class GridWidget( QtWidgets.QWidget ):
+	lineClicked = QtCore.pyqtSignal( object )
+
 	def __init__( self, grid : grid.Grid ):
 		super(GridWidget, self).__init__()
 		self._grid = grid
@@ -56,20 +58,7 @@ class GridWidget( QtWidgets.QWidget ):
 		self._lastLineId = None
 		self._prevMousePos = None
 		self.setMouseTracking(True)
-		self.initNetworkThread()
-
-	def initNetworkThread(self):
-		if len(sys.argv) > 1:
-			# Client.
-			host = sys.argv[1]
-			self.conn_thread = network.client(host)
-			self.myturn = False
-		else:
-			# Server.
-			self.conn_thread = network.server()
-			self.myturn = True
-		self.conn_thread.data_recv.connect(self.on_recv)
-		self.conn_thread.start()
+		
 
 
 	def initGrid( self ):
@@ -81,14 +70,6 @@ class GridWidget( QtWidgets.QWidget ):
 		for box in range( self._grid.maxBox() ):
 			column, row = self._grid.getBoxCoord( box )
 			self.boxes.append( GridBox( column, row ) )
-
-	def on_recv(self, data):
-		print("on_recv.")
-		pos = int(data)
-		print("   pos:", pos)
-		#if self.myturn:
-		#	return
-		# Verify that the position is valid and that it hasn't been set already.
 
 	def setLine( self, cell:int ):
 		self.highlite( cell )
@@ -192,8 +173,7 @@ class GridWidget( QtWidgets.QWidget ):
 			return
 
 		print("click at pos:", pos)
-		print("sending:", pos)
-		self.conn_thread.data_send.emit(str(pos))
+		self.lineClicked.emit( pos )
 
 	def locateLine(self, x:int, y:int) -> int:
 		x /= self.scale
