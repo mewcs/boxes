@@ -74,7 +74,3 @@ class MainWindow(QtWidgets.QWidget):
 def createWindow():
     win = MainWindow(5, 5)
     return win
-
-if __name__ == '__main__':
-    win = createWindow()
-    win.closeWindow()
