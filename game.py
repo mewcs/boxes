@@ -1,6 +1,6 @@
 import network
 import gui
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtWidgets
 
 
 class Game(object):
@@ -14,9 +14,9 @@ class Game(object):
         askServerClient = QtWidgets.QInputDialog(self.win)
         askServerClient.setLabelText("Enter ip to connect to or empty to be host")
         askServerClient.exec()
-        input = askServerClient.textValue()
+        host = askServerClient.textValue()
 
-        self.host = input if input.strip() else None
+        self.host = host if host.strip() else None
 
         # Init connection
         if self.isServer():
