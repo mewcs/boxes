@@ -146,7 +146,7 @@ def testGrid():
         print("was able to set line 12")
     if grid.setLine(16):
         print("was able to set line 21")
-    while 1:
+    while True:
         print("Drawn lines: ", grid.drawnLines())
         coord = int(input("Enter pos to set: "))
         col, row, orientation = grid.getCoord(coord)
