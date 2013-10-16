@@ -1,5 +1,5 @@
 import socket
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore
 
 DEFAULT_PORT = 50015
 BUFFER_SIZE = 1024
@@ -44,6 +44,7 @@ class server(communicator):
     def __init__(self, port=DEFAULT_PORT):
         super(server, self).__init__()
         self._port = port
+        self._addr = None
 
     def run(self):
         self.waitForConnection()
