@@ -1,7 +1,5 @@
-import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
-import grid
-import network
+from grid import Grid
 
 LINE_LENGTH = 20
 LINE_THICKNESS = 1
@@ -18,17 +16,17 @@ COLOR_OPPONENT = QtCore.Qt.green
 
 class GridLine(object):
 
-    def __init__(self, column: int, row: int, dir: int):
+    def __init__(self, column: int, row: int, orientation: int):
         pad = LINE_THICKNESS_DRAWN_HALF
         self.start = QtCore.QPoint()
         self.start.setX(pad + column * LINE_LENGTH)
         self.start.setY(pad + row * LINE_LENGTH)
         self.end = QtCore.QPoint()
-        if(dir == grid.Grid.VLINE):
+        if(orientation == Grid.VLINE):
             self.end.setX(self.start.x())
             self.end.setY(self.start.y() + LINE_LENGTH)
 
-        elif(dir == grid.Grid.HLINE):
+        elif(orientation == Grid.HLINE):
             self.end.setX(self.start.x() + LINE_LENGTH)
             self.end.setY(self.start.y())
 
@@ -52,7 +50,7 @@ class GridBox(object):
 class GridWidget(QtWidgets.QWidget):
     lineClicked = QtCore.pyqtSignal(object)
 
-    def __init__(self, grid: grid.Grid):
+    def __init__(self, grid: Grid):
         super(GridWidget, self).__init__()
         self._grid = grid
         self.lines = list()
@@ -67,8 +65,8 @@ class GridWidget(QtWidgets.QWidget):
     def initGrid(self):
         maxPos = self._grid.maxPos()
         for cell in range(maxPos + 1):
-            column, row, dir = self._grid.getCoord(cell)
-            self.lines.append(GridLine(column, row, dir))
+            column, row, orientation = self._grid.getCoord(cell)
+            self.lines.append(GridLine(column, row, orientation))
 
         for box in range(self._grid.maxBox()):
             column, row = self._grid.getBoxCoord(box)
@@ -90,8 +88,8 @@ class GridWidget(QtWidgets.QWidget):
         self.lines[cell].width = LINE_THICKNESS_DRAWN
 
     def resizeEvent(self, QResizeEvent):
-        pixmapWidth = self._grid._cols * LINE_LENGTH + 2
-        pixmapHeight = self._grid._rows * LINE_LENGTH + 2
+        pixmapWidth = self._grid.cols() * LINE_LENGTH + 2
+        pixmapHeight = self._grid.rows() * LINE_LENGTH + 2
 
         self.scale = min(float(self.width()) / pixmapWidth, float(self.height()) / pixmapHeight)
 
@@ -184,7 +182,7 @@ class GridWidget(QtWidgets.QWidget):
         pad = LINE_THICKNESS_DRAWN_HALF + 1
         for pos in range(len(self.lines)):
             line = self.lines[pos]
-            if pos < self._grid._horiz:
+            if pos < self._grid.horiz():
                 # Horizontal line.
                 xpad = 0
                 ypad = pad
