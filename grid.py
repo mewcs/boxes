@@ -26,6 +26,30 @@ class Grid(object):
         # Number of vertical lines.
         self._vert = (cols + 1) * rows
 
+    def cols(self):
+        """
+        cols returns the number of columns on the grid.
+        """
+        return self._cols
+
+    def rows(self):
+        """
+        rows returns the number of rows on the grid.
+        """
+        return self._rows
+
+    def horiz(self):
+        """
+        horiz returns the number of horizontal lines on the grid.
+        """
+        return self._horiz
+
+    def vert(self):
+        """
+        vert returns the number of vertical lines on the grid.
+        """
+        return self._vert
+
     def _validate(self, pos: int):
         """
         _validate validates the provided position. It raises an exception if the
