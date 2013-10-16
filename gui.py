@@ -1,4 +1,3 @@
-import random
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 import grid
@@ -10,6 +9,9 @@ class MainWindow(QtWidgets.QWidget):
     def __init__(self, cols, rows):
         self.app = QtWidgets.QApplication(sys.argv)
         super(MainWindow, self).__init__()
+        self.grid = None
+        self.scoreLabel = None
+        self.gridWidget = None
         self.initUI(cols, rows)
 
     def initUI(self, cols, rows):
