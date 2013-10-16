@@ -87,7 +87,7 @@ class GridWidget(QtWidgets.QWidget):
         self.lines[cell].color = LINE_LASTDRAWN
         self.lines[cell].width = LINE_THICKNESS_DRAWN
 
-    def resizeEvent(self, QResizeEvent):
+    def resizeEvent(self, event):
         pixmapWidth = self._grid.cols() * LINE_LENGTH + 2
         pixmapHeight = self._grid.rows() * LINE_LENGTH + 2
 
