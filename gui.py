@@ -5,17 +5,19 @@ import gridWidget
 
 
 class BoxesWindow(QtWidgets.QWidget):
+
     """
     The main ui for the gmae
     """
-    def __init__(self, cols:int, rows:int):
+
+    def __init__(self, cols: int, rows: int):
         """
         Parameters:
             cols: Numer of columns
             rows: Numbers of rows
         """
         super(BoxesWindow, self).__init__()
-        
+
         line_pad = gridWidget.LINE_THICKNESS_DRAWN_HALF
         self.center()
         self.setWindowTitle('Boxes')
@@ -39,12 +41,12 @@ class BoxesWindow(QtWidgets.QWidget):
 
         # Status line
         self.statusBar = QtWidgets.QStatusBar()
-        self.statusBar.setSizeGripEnabled( False )
-        self.statusBar.setFixedHeight( 50 )
+        self.statusBar.setSizeGripEnabled(False)
+        self.statusBar.setFixedHeight(50)
         self.permanentStatus = QtWidgets.QStatusBar()
-        self.permanentStatus.setSizeGripEnabled( False )
-        self.permanentStatus.setMinimumWidth( 200 )
-        self.statusBar.addWidget( self.permanentStatus )
+        self.permanentStatus.setSizeGripEnabled(False)
+        self.permanentStatus.setMinimumWidth(200)
+        self.statusBar.addWidget(self.permanentStatus)
 
         # Grid widget
         self.grid = grid.Grid(cols, rows)
@@ -52,9 +54,9 @@ class BoxesWindow(QtWidgets.QWidget):
 
         # Main layout
         mainLyt = QtWidgets.QVBoxLayout()
-        mainLyt.setAlignment( QtCore.Qt.AlignHCenter )
+        mainLyt.setAlignment(QtCore.Qt.AlignHCenter)
         mainLyt.addLayout(scoreLyt)
-        mainLyt.addWidget( self.statusBar )
+        mainLyt.addWidget(self.statusBar)
         mainLyt.addWidget(self.gridWidget)
 
         self.setLayout(mainLyt)
@@ -85,13 +87,13 @@ class BoxesWindow(QtWidgets.QWidget):
         rect.moveCenter(point)
         self.move(rect.topRight())
 
-    def setStatus( self, text:str, msecs:int=1000 ):
+    def setStatus(self, text: str, msecs: int=1000):
         """ Show a message in the status bar for msecs milliseconds """
-        self.statusBar.showMessage( text, msecs )
+        self.statusBar.showMessage(text, msecs)
 
-    def setPermanentStatus( self, text:str ):
+    def setPermanentStatus(self, text: str):
         """ 
         Show a permanent message in the status bar.
         Overrides any previous permanent message
         """
-        self.permanentStatus.showMessage( text )
+        self.permanentStatus.showMessage(text)

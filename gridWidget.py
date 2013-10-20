@@ -16,9 +16,11 @@ COLOR_OPPONENT = QtCore.Qt.green
 
 
 class GridLine(object):
+
     """
     Holds data about a line such as start-point, end-point and color
     """
+
     def __init__(self, column: int, row: int, orientation: int):
         pad = LINE_THICKNESS_DRAWN_HALF
         self.start = QtCore.QPoint()
@@ -36,13 +38,13 @@ class GridLine(object):
         self.color = LINE_UNDRAWN
         self.width = LINE_THICKNESS
 
-    def copy( self ):
+    def copy(self):
         """ 
         Return a copy of self 
         Note: Is there a safer way to do this. 
         What if we add variables to self and forget to copy them in this function?
         """
-        newLine = GridLine(0,0,0)
+        newLine = GridLine(0, 0, 0)
         newLine.start = self.start
         newLine.end = self.end
         newLine.color = self.color
@@ -51,9 +53,11 @@ class GridLine(object):
 
 
 class GridBox(object):
+
     """
     Holds data about a box in the grid
     """
+
     def __init__(self, column: int, row: int):
         self.start = QtCore.QPoint()
         self.start.setX(column * LINE_LENGTH)
@@ -66,21 +70,22 @@ class GridBox(object):
 
 
 class GridWidget(QtWidgets.QWidget):
+
     """
     A widget for displaying a grid for the game Boxes
     """
 
-    lineClicked = QtCore.pyqtSignal(object) # Signal emitted when clicking on a line
+    lineClicked = QtCore.pyqtSignal(object)  # Signal emitted when clicking on a line
 
     def __init__(self, grid: Grid):
         super(GridWidget, self).__init__()
         self._grid = grid
-        self.lines = list() # List of GridLine to draw
-        self.boxes = list() # List of GridBox to draw
-        self.mouseOverLine =  None # GridLine to draw on mouseover
+        self.lines = list()  # List of GridLine to draw
+        self.boxes = list()  # List of GridBox to draw
+        self.mouseOverLine = None  # GridLine to draw on mouseover
 
         self.initGrid()
-        self.scale = 1.0 # The scale of the widget
+        self.scale = 1.0  # The scale of the widget
         self._lastLineId = None
         self._prevMousePos = None
         self.setMouseTracking(True)
@@ -236,8 +241,8 @@ class GridWidget(QtWidgets.QWidget):
         self._prevMousePos = None
         self.repaint()
 
-    def sizeHint( self ) -> QtCore.QSize:
+    def sizeHint(self) -> QtCore.QSize:
         """ Returns the ideal size of the widget """
         x = LINE_LENGTH * self._grid.cols() + 1 + 2 * LINE_THICKNESS_DRAWN_HALF
         y = LINE_LENGTH * self._grid.rows() + 1 + 2 * LINE_THICKNESS_DRAWN_HALF
-        return QtCore.QSize( x, y )
+        return QtCore.QSize(x, y)

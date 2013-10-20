@@ -3,13 +3,16 @@ import gui
 from PyQt5 import QtWidgets
 import time
 
-GRID_SIZE = (5,5)
+GRID_SIZE = (5, 5)
+
 
 class Game(object):
+
     """
     A game of boxes head to head over network or on the same computer.
     """
-    def __init__(self, host:str=None):
+
+    def __init__(self, host: str=None):
         '''
         Parameters:
             host : str with ip to connect to or None if server
@@ -19,11 +22,11 @@ class Game(object):
         game2 = Game("localhost") # New instance that will connect to host on local machine
         '''
 
-        self._score = [0, 0] # he current score. First index is current player, second is the opponent
-        
+        self._score = [0, 0]  # he current score. First index is current player, second is the opponent
+
         self.host = host    # None if server, ip string if client
 
-        self.win = gui.BoxesWindow( GRID_SIZE[0], GRID_SIZE[1] )
+        self.win = gui.BoxesWindow(GRID_SIZE[0], GRID_SIZE[1])
 
         # Init connection
         if self.isServer():
@@ -31,7 +34,7 @@ class Game(object):
         else:
             self._connection = network.client(self.host)
 
-        self.myturn = self.isServer() # Server starts
+        self.myturn = self.isServer()  # Server starts
 
         # Connect data recieved signal to our function and start network thread
         self._connection.data_recv.connect(self.on_recv)
@@ -50,16 +53,15 @@ class Game(object):
         """
         # Only do something if it is our turn
         if self.myturn:
-            self.drawLine( pos )
+            self.drawLine(pos)
         else:
             self.win.setStatus("Not your turn")
 
-
-    def drawLine( self, pos ):
+    def drawLine(self, pos):
         """
         Draw a line and act on the result of that
         """
-        wasMe = self.myturn # Was the line drawn by this game or opponent
+        wasMe = self.myturn  # Was the line drawn by this game or opponent
 
         # Set the line in our grid object
         result = self.win.grid.setLine(pos)
@@ -68,7 +70,7 @@ class Game(object):
         if result >= 0:
             # Draw the line in the UI
             self.win.setLine(pos)
-                
+
             # If no boxes where completed
             if result == 0:
                 self.myturn = not self.myturn
@@ -82,10 +84,10 @@ class Game(object):
                     self.win.setBox(box, not wasMe)
             if wasMe:
                 self._connection.data_send.emit(str(pos))
-            
+
         # Cant set line at this pos
         else:
-            self.win.setStatus("Can't draw here, try again", 2000 )
+            self.win.setStatus("Can't draw here, try again", 2000)
 
     def on_recv(self, data):
         """
@@ -93,7 +95,7 @@ class Game(object):
         """
         if not self.myturn:
             pos = int(data)
-            self.drawLine( pos )
+            self.drawLine(pos)
         else:
             raise BaseException("Got line but it's my turn!")
 
@@ -103,14 +105,14 @@ class Game(object):
     def isClient(self):
         return bool(self.host)
 
-    def getMyTurn( self ):
+    def getMyTurn(self):
         return self._myturn
 
-    def setMyTurn( self, value ):
+    def setMyTurn(self, value):
         self._myturn = value
         if value:
-            self.win.setPermanentStatus( "Your turn" )
+            self.win.setPermanentStatus("Your turn")
         else:
-            self.win.setPermanentStatus( "Waiting for opponent" )
+            self.win.setPermanentStatus("Waiting for opponent")
 
-    myturn = property( getMyTurn, setMyTurn )
+    myturn = property(getMyTurn, setMyTurn)
