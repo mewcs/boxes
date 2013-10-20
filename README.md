@@ -6,9 +6,16 @@ paper game known as [boxes][].
 
 The following image demonstrates a game of boxes on a 2x2 board.
 
-![Boxes Screenshot](https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Dots-and-boxes.svg/300px-Dots-and-boxes.svg.png)
+![Boxes Example](https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Dots-and-boxes.svg/300px-Dots-and-boxes.svg.png)
 
 [boxes]: https://en.wikipedia.org/wiki/Dots_and_Boxes
+
+Screenshot
+----------
+
+Below is a screenshot from the game :)
+
+![Boxes Screenshot](https://raw.github.com/mewcs/boxes/master/screenshot.png)
 
 Ideas
 -----
