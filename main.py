@@ -1,5 +1,5 @@
 import game
-from PyQt5 import QtGui, QtWidgets, QtCore
+from PyQt5 import QtWidgets
 import sys
 
 
