@@ -160,7 +160,7 @@ class GridWidget(QtWidgets.QWidget):
 
         # draw mouse line.
         if self.mouseOverLine:
-                self.drawLine(self.mouseOverLine, painter)
+            self.drawLine(self.mouseOverLine, painter)
 
         painter.end()
 
