@@ -39,9 +39,9 @@ class GridLine(object):
         self.width = LINE_THICKNESS
 
     def copy(self):
-        """ 
-        Return a copy of self 
-        Note: Is there a safer way to do this. 
+        """
+        Return a copy of self
+        Note: Is there a safer way to do this.
         What if we add variables to self and forget to copy them in this function?
         """
         newLine = GridLine(0, 0, 0)

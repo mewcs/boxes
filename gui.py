@@ -92,7 +92,7 @@ class BoxesWindow(QtWidgets.QWidget):
         self.statusBar.showMessage(text, msecs)
 
     def setPermanentStatus(self, text: str):
-        """ 
+        """
         Show a permanent message in the status bar.
         Overrides any previous permanent message
         """
