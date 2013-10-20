@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from grid import Grid
 
+# Pre-defines
 LINE_LENGTH = 20
 LINE_THICKNESS = 1
 LINE_THICKNESS_DRAWN = 3
@@ -15,7 +16,9 @@ COLOR_OPPONENT = QtCore.Qt.green
 
 
 class GridLine(object):
-
+    """
+    Holds data about a line such as start-point, end-point and color
+    """
     def __init__(self, column: int, row: int, orientation: int):
         pad = LINE_THICKNESS_DRAWN_HALF
         self.start = QtCore.QPoint()
@@ -33,9 +36,24 @@ class GridLine(object):
         self.color = LINE_UNDRAWN
         self.width = LINE_THICKNESS
 
+    def copy( self ):
+        """ 
+        Return a copy of self 
+        Note: Is there a safer way to do this. 
+        What if we add variables to self and forget to copy them in this function?
+        """
+        newLine = GridLine(0,0,0)
+        newLine.start = self.start
+        newLine.end = self.end
+        newLine.color = self.color
+        newLine.width = self.width
+        return newLine
+
 
 class GridBox(object):
-
+    """
+    Holds data about a box in the grid
+    """
     def __init__(self, column: int, row: int):
         self.start = QtCore.QPoint()
         self.start.setX(column * LINE_LENGTH)
@@ -48,21 +66,29 @@ class GridBox(object):
 
 
 class GridWidget(QtWidgets.QWidget):
-    lineClicked = QtCore.pyqtSignal(object)
+    """
+    A widget for displaying a grid for the game Boxes
+    """
+
+    lineClicked = QtCore.pyqtSignal(object) # Signal emitted when clicking on a line
 
     def __init__(self, grid: Grid):
         super(GridWidget, self).__init__()
         self._grid = grid
-        self.lines = list()
-        self.boxes = list()
+        self.lines = list() # List of GridLine to draw
+        self.boxes = list() # List of GridBox to draw
+        self.mouseOverLine =  None # GridLine to draw on mouseover
+
         self.initGrid()
-        self.scale = 1.0
-        self.show()
+        self.scale = 1.0 # The scale of the widget
         self._lastLineId = None
         self._prevMousePos = None
         self.setMouseTracking(True)
 
     def initGrid(self):
+        """
+        Create the visual grid. Lines and boxes.
+        """
         maxPos = self._grid.maxPos()
         for cell in range(maxPos + 1):
             column, row, orientation = self._grid.getCoord(cell)
@@ -81,6 +107,9 @@ class GridWidget(QtWidgets.QWidget):
         self.repaint()
 
     def highlight(self, cell: int):
+        """
+        Show a line as just drawn
+        """
         if self._lastLineId is not None:
             self.lines[self._lastLineId].color = LINE_DRAWN
         self._lastLineId = cell
@@ -88,12 +117,18 @@ class GridWidget(QtWidgets.QWidget):
         self.lines[cell].width = LINE_THICKNESS_DRAWN
 
     def resizeEvent(self, event):
+        """
+        Scale the grid according to the size of the widget
+        """
         pixmapWidth = self._grid.cols() * LINE_LENGTH + 2
         pixmapHeight = self._grid.rows() * LINE_LENGTH + 2
 
         self.scale = min(float(self.width()) / pixmapWidth, float(self.height()) / pixmapHeight)
 
     def paintEvent(self, event):
+        """
+        Main paint function. Called whenever recieving focus, resized etc. by QWidget
+        """
         painter = QtGui.QPainter()
         painter.begin(self)
         painter.scale(self.scale, self.scale)
@@ -118,15 +153,15 @@ class GridWidget(QtWidgets.QWidget):
             line = self.lines[self._lastLineId]
             self.drawLine(line, painter)
 
-        # draw mouse lines.
-        for line in self.lines:
-            if line.color == LINE_MOUSE:
-                self.drawLine(line, painter)
+        # draw mouse line.
+        if self.mouseOverLine:
+                self.drawLine(self.mouseOverLine, painter)
 
         painter.end()
 
     @staticmethod
     def drawLine(line: GridLine, painter: QtGui.QPainter):
+        """ Draw line in QPainter """
         pen = QtGui.QPen()
         pen.setColor(line.color)
         pen.setWidth(line.width)
@@ -135,6 +170,7 @@ class GridWidget(QtWidgets.QWidget):
 
     @staticmethod
     def drawBox(box: GridBox, painter: QtGui.QPainter):
+        """ Draw box in QPainter """
         rect = QtCore.QRect(box.start, box.end)
         painter.fillRect(rect, box.color)
 
@@ -146,23 +182,19 @@ class GridWidget(QtWidgets.QWidget):
         # Ignore the mouse event if the position hasn't changed since last time.
         if self._prevMousePos == pos:
             return
-
-        # Restore the line color at the previous mouse position.
-        self.restorePrevMouseLine()
+        self._prevMousePos = pos
 
         # Return if no line was located at the mouse cursor coordinates.
         if pos is None:
+            self.mouseOverLine = None
             # Repaint to remove prev mouse line.
             self.repaint()
             return
 
-        print("hover at pos:", pos)
-        line = self.lines[pos]
-        if line.color == LINE_UNDRAWN:
-            self._prevMousePos = pos
-            self.lines[pos].color = LINE_MOUSE
-            self.lines[pos].width = LINE_THICKNESS_DRAWN
-            self.repaint()
+        self.mouseOverLine = self.lines[pos].copy()
+        self.mouseOverLine.color = LINE_MOUSE
+        self.mouseOverLine.width = LINE_THICKNESS_DRAWN
+        self.repaint()
 
     def mousePressEvent(self, event):
         x = event.x()
@@ -173,12 +205,16 @@ class GridWidget(QtWidgets.QWidget):
         if pos is None:
             return
 
-        print("click at pos:", pos)
         self.lineClicked.emit(pos)
 
     def locateLine(self, x: int, y: int) -> int:
+        """
+        Given the local x and y pixels, return the line id that that point
+        """
+        # Accomodate for scale of grid
         x /= self.scale
         y /= self.scale
+
         pad = LINE_THICKNESS_DRAWN_HALF + 1
         for pos in range(len(self.lines)):
             line = self.lines[pos]
@@ -194,14 +230,14 @@ class GridWidget(QtWidgets.QWidget):
                 return pos
         return None
 
-    def restorePrevMouseLine(self):
-        """ Restore the line color at the previous mouse position. """
-        if self._prevMousePos is not None:
-            self.lines[self._prevMousePos].color = LINE_UNDRAWN
-            self.lines[self._prevMousePos].width = LINE_THICKNESS
-            self._prevMousePos = None
-
     def leaveEvent(self, event):
         # Restore the line color at the previous mouse position.
-        self.restorePrevMouseLine()
+        self.mouseOverLine = None
+        self._prevMousePos = None
         self.repaint()
+
+    def sizeHint( self ) -> QtCore.QSize:
+        """ Returns the ideal size of the widget """
+        x = LINE_LENGTH * self._grid.cols() + 1 + 2 * LINE_THICKNESS_DRAWN_HALF
+        y = LINE_LENGTH * self._grid.rows() + 1 + 2 * LINE_THICKNESS_DRAWN_HALF
+        return QtCore.QSize( x, y )
