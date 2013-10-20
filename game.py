@@ -1,7 +1,5 @@
 import network
 import gui
-from PyQt5 import QtWidgets
-import time
 
 GRID_SIZE = (5, 5)
 
@@ -23,6 +21,7 @@ class Game(object):
         '''
 
         self._score = [0, 0]  # he current score. First index is current player, second is the opponent
+        self._myturn = None
 
         self.host = host    # None if server, ip string if client
 
