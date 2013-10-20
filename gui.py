@@ -1,4 +1,3 @@
-import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 import grid
 import gridWidget
@@ -18,7 +17,6 @@ class BoxesWindow(QtWidgets.QWidget):
         """
         super(BoxesWindow, self).__init__()
 
-        line_pad = gridWidget.LINE_THICKNESS_DRAWN_HALF
         self.center()
         self.setWindowTitle('Boxes')
 
