@@ -20,7 +20,7 @@ class Game(object):
         game2 = Game("localhost") # New instance that will connect to host on local machine
         '''
 
-        self._score = [0, 0]  # he current score. First index is current player, second is the opponent
+        self._score = [0, 0]  # The current score. First index is current player, second is the opponent
         self._myturn = None
 
         self.host = host    # None if server, ip string if client

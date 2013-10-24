@@ -89,7 +89,7 @@ Future work
 
 * Use the grid from a finished game of boxes to construct a cubescape. The
   cubescape will be divided into blue and red areas based on the players color.
-  This devision of areas could be used as a starting point for a game of RISK
+  This division of areas could be used as a starting point for a game of RISK
   or Heroes of Might and Magic.
 
 Previous work
